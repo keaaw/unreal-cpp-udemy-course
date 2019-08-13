@@ -1,0 +1,3 @@
+[submodule "BullCowGame"]
+	path = BullCowGame
+	url = /Users/kmw/src/udemy/unreal-cpp/bullcow/BullCowGame-starter-kit/Source/BullCowGame
