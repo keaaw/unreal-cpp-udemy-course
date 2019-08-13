@@ -1,0 +1,7 @@
+{
+	"files.exclude": {
+		"/Users/kmw/src/udemy/unreal-cpp/unreal-cpp-udemy-course/BuildingEscape/.vscode": true,
+		"/Users/kmw/src/udemy/unreal-cpp/unreal-cpp-udemy-course/BuildingEscape/Content": true,
+		"/Users/kmw/src/udemy/unreal-cpp/unreal-cpp-udemy-course/BuildingEscape/Intermediate": true
+	}
+}
