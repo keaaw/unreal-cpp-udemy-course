@@ -22,7 +22,9 @@ void UPositionReport::BeginPlay()
 
 	// ...
 	auto objName = GetOwner()->GetName();
-	UE_LOG(LogTemp, Warning, TEXT("KMW: PositionReport reporting, objName:%s"), *objName);
+	auto objPosStr = GetOwner()->GetActorLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("KMW:UPositionReport::BeginPlay: objName:%s position:%s"), *objName, *objPosStr);
+	GetOwner()->SetLifeSpan(2.5);
 }
 
 
@@ -32,5 +34,19 @@ void UPositionReport::TickComponent(float DeltaTime, ELevelTick TickType, FActor
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
 	// ...
+	// auto objName = GetOwner()->GetName();
+	// auto result = GetOwner()->Destroy();
+	// UE_LOG(LogTemp, Warning, TEXT("KMW: objName:%s result of destroy: %d"), *objName, result);
+
 }
+
+void UPositionReport::OnComponentDestroyed(bool bDestroyingHierarchy)
+{
+	auto objName = GetOwner()->GetName();
+	auto objPosStr = GetOwner()->GetActorLocation().ToString();
+	UE_LOG(LogTemp, Warning, TEXT("KMW:UPositionReport::OnComponentDestroyed: objName:%s bDestroyingHierarchy:%d"), *objName, bDestroyingHierarchy);
+
+}
+
+
 
