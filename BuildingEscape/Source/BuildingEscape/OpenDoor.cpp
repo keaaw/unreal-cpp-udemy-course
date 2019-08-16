@@ -20,14 +20,18 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 
+}
+
+void UOpenDoor::OpenDoor()
+{
 	// ...
 	auto parentActor = GetOwner()->GetParentActor();
 	auto objName = GetOwner()->GetName();
 	auto rotation = GetOwner()->GetActorRotation();
 	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::BeginPlay: objName:%s rotation:%s"), *objName, *rotation.ToString())
 	// rotation.Pitch += 45;
-	// rotation.Yaw -= 60;
-	// GetOwner()->SetActorRotation(rotation);
+	rotation.Yaw -= 1;
+	GetOwner()->SetActorRotation(rotation);
 }
 
 
@@ -36,6 +40,9 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 {
 	Super::TickComponent(DeltaTime, TickType, ThisTickFunction);
 
-	// ...
+	// poll the trigger volume
+	// if the actor that opens is in the volume, then we open the door
+	if (pressurePlate_->IsOverlappingActor(actorThatOpens_))
+		OpenDoor();
 }
 
