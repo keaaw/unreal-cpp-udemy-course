@@ -24,7 +24,7 @@ void UPositionReport::BeginPlay()
 	auto objName = GetOwner()->GetName();
 	auto objPosStr = GetOwner()->GetActorLocation().ToString();
 	UE_LOG(LogTemp, Warning, TEXT("KMW:UPositionReport::BeginPlay: objName:%s position:%s"), *objName, *objPosStr);
-	GetOwner()->SetLifeSpan(2.5);
+	// GetOwner()->SetLifeSpan(2.5);
 }
 
 

@@ -26,8 +26,8 @@ void UOpenDoor::BeginPlay()
 	auto rotation = GetOwner()->GetActorRotation();
 	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::BeginPlay: objName:%s rotation:%s"), *objName, *rotation.ToString())
 	// rotation.Pitch += 45;
-	rotation.Yaw -= 60;
-	GetOwner()->SetActorRotation(rotation);
+	// rotation.Yaw -= 60;
+	// GetOwner()->SetActorRotation(rotation);
 }
 
 
