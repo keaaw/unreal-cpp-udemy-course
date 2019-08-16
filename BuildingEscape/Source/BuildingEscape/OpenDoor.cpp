@@ -38,7 +38,7 @@ void UOpenDoor::SetDoorRotation(float yawDegrees)
 void UOpenDoor::OpenDoor()
 {
 	doorOpen_ = true;
-	SetDoorRotation(90);
+	SetDoorRotation(openAngle_);
 	auto objName = GetOwner()->GetName();
 	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::OpenDoor: objName:%s"), *objName);
 }
