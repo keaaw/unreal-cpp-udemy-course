@@ -27,12 +27,22 @@ public:
 
 private:
 	void OpenDoor();
+	void CloseDoor();
+	void SetDoorRotation(float yawDegrees);
+
+	bool doorOpen_;
+	bool steppedOffPlate_;
 
 	UPROPERTY(VisibleAnywhere)
 	float openAngle_ = 90;
 
 	UPROPERTY(EditAnywhere)
 	ATriggerVolume* pressurePlate_;
+
+	UPROPERTY(EditAnywhere)
+	float doorCloseDelay_ = 1;
+
+	float lastDoorOpenTime_;
 
 	AActor* actorThatOpens_;
 		

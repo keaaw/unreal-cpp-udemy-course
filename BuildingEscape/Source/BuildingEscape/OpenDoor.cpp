@@ -21,20 +21,35 @@ void UOpenDoor::BeginPlay()
 {
 	Super::BeginPlay();
 	actorThatOpens_ = GetWorld()->GetFirstPlayerController()->GetPawn();
+	doorOpen_ = false;
+	steppedOffPlate_ = false;
+}
+
+void UOpenDoor::SetDoorRotation(float yawDegrees)
+{
+	auto rotation = GetOwner()->GetActorRotation();
+	rotation.Yaw = yawDegrees;
+	GetOwner()->SetActorRotation(rotation);
+
+	auto objName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::setDoorRotation: objName:%s rotation:%s"), *objName, *rotation.ToString())
 }
 
 void UOpenDoor::OpenDoor()
 {
-	// ...
-	auto parentActor = GetOwner()->GetParentActor();
+	doorOpen_ = true;
+	SetDoorRotation(90);
 	auto objName = GetOwner()->GetName();
-	auto rotation = GetOwner()->GetActorRotation();
-	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::BeginPlay: objName:%s rotation:%s"), *objName, *rotation.ToString())
-	// rotation.Pitch += 45;
-	rotation.Yaw -= 1;
-	GetOwner()->SetActorRotation(rotation);
+	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::OpenDoor: objName:%s"), *objName);
 }
 
+void UOpenDoor::CloseDoor()
+{
+	doorOpen_ = false;
+	SetDoorRotation(0);
+	auto objName = GetOwner()->GetName();
+	UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::CloseDoor: objName:%s"), *objName);
+}
 
 // Called every frame
 void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorComponentTickFunction* ThisTickFunction)
@@ -43,7 +58,26 @@ void UOpenDoor::TickComponent(float DeltaTime, ELevelTick TickType, FActorCompon
 
 	// poll the trigger volume
 	// if the actor that opens is in the volume, then we open the door
-	if (pressurePlate_->IsOverlappingActor(actorThatOpens_))
+	auto objName = GetOwner()->GetName();
+	if (!doorOpen_ && pressurePlate_->IsOverlappingActor(actorThatOpens_))
+	{
 		OpenDoor();
+		steppedOffPlate_ = false;
+		UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::TickComponent: objName:%s trigger door open"), *objName);
+	}
+	else if (doorOpen_ && !steppedOffPlate_ && !pressurePlate_->IsOverlappingActor(actorThatOpens_))
+	{
+		steppedOffPlate_ = true;
+		lastDoorOpenTime_ = GetWorld()->GetTimeSeconds();
+		UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::TickComponent: objName:%s step off plate at time %f"), *objName, lastDoorOpenTime_);
+	}
+	else if (doorOpen_ && steppedOffPlate_)
+	{
+		UE_LOG(LogTemp, Warning, TEXT("KMW:UOpenDoor::TickComponent: objName:%s in door close delay: time now %f"), *objName, GetWorld()->GetTimeSeconds());
+		UE_LOG(LogTemp, Warning, TEXT("KMW:lastOpenTime = %f"), lastDoorOpenTime_);
+
+		if (GetWorld()->GetTimeSeconds() >= lastDoorOpenTime_ + doorCloseDelay_)
+			CloseDoor();
+	}
 }
 
